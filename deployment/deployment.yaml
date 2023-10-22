@@ -1,0 +1,28 @@
+#deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hugo-app
+  labels:
+    app: hugo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: hugo-app
+  template:
+    metadata:
+      labels:
+        app: hugo-app
+    spec:
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+      containers:
+        - name: hugo-app
+          image: arc
+          volumeMounts:
+            - mountPath: "/root/hugosite"
+              name: task-pv-storage
+
